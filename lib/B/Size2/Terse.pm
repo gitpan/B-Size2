@@ -16,7 +16,7 @@ use constant MP2        => ($ENV{MOD_PERL_API_VERSION} || 0) == 2 ? 1 : 0;
 use B ();
 use B::Size2 ();
 
-our $VERSION = "2.02";
+our $VERSION = "2.03";
 
 my $opcount;
 my $opsize;
@@ -246,9 +246,11 @@ sub indent {
 
 #thanks B::Deparse
 sub padname {
-    my $obj = shift;
-    return '?' unless ref $obj;
-    my $str = $obj->PV;
+    my($sv) = @_;
+    if (!( ref $sv && $sv->FLAGS & (B::SVf_POK | B::SVp_POK) != 0 )) {
+        return '?';
+    }
+    my $str = $sv->PVX;
     my $ix = index($str, "\0");
     $str = substr($str, 0, $ix) if $ix != -1;
     return $str;
@@ -715,7 +717,7 @@ B(3), B::Size(3), B::LexInfo(3), Apache::Status(3)
 
 =head1 AUTHORS
 
-Fuji, Goro (gfx) E<LT>gfuji@cpan.orgE<gt>
+Fuji, Goro (gfx) E<lt>gfuji@cpan.orgE<gt>
 
 =head1 ORIGINAL AUTHORS
 

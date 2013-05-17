@@ -13,7 +13,7 @@ use XSLoader ();
 use B ();
 
 BEGIN {
-    our $VERSION = '2.02';
+    our $VERSION = '2.03';
 
     XSLoader::load(__PACKAGE__, $VERSION);
 }
@@ -35,7 +35,13 @@ sub _SvPAD_OUR { # see SvPAD_OUR()@sv.h
 }
 
 sub B::SVOP::size {
-    B::Sizeof::SVOP + shift->sv->size;
+    my($op) = @_;
+    if ($op->desc eq 'constant array element') { # aelemfast
+        return B::Sizeof::SVOP;
+    }
+    else {
+        return B::Sizeof::SVOP + $op->sv->size;
+    }
 }
 
 sub B::GVOP::size {
@@ -266,7 +272,7 @@ L<B::Size> - the original
 
 =head1 AUTHORS
 
-Fuji, Goro (gfx) E<LT>gfuji@cpan.orgE<gt>
+Fuji, Goro (gfx) E<lt>gfuji@cpan.orgE<gt>
 
 =head1 ORIGINAL AUTHORS
 
