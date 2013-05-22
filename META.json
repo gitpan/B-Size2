@@ -1,12 +1,12 @@
 {
    "abstract" : "unknown",
    "author" : [
-      "unknown"
+      "Fuji, Goro (gfx) <gfuji@cpan.org>"
    ],
    "dynamic_config" : 1,
    "generated_by" : "ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.120921",
    "license" : [
-      "unknown"
+      "perl_5"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
@@ -22,19 +22,22 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "0",
+            "ExtUtils::ParseXS" : "0",
             "Test::More" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "Devel::PPPort" : "3.20"
+            "Devel::PPPort" : "3.20",
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "runtime" : {
-         "requires" : {}
+         "requires" : {
+            "B" : "0"
+         }
       }
    },
    "release_status" : "stable",
-   "version" : "2.04"
+   "version" : "2.05"
 }
