@@ -16,7 +16,7 @@ use constant MP2        => ($ENV{MOD_PERL_API_VERSION} || 0) == 2 ? 1 : 0;
 use B ();
 use B::Size2 ();
 
-our $VERSION = "2.03";
+our $VERSION = "2.04";
 
 my $opcount;
 my $opsize;
@@ -211,8 +211,10 @@ my @curpad_names = ();
 sub init_curpad_names {
     my $cv = B::svref_2object(shift);
     my $padlist = $cv->PADLIST;
-    return if ref($padlist) eq 'B::SPECIAL';
-    @curpad_names = ($padlist->ARRAY)[0]->ARRAY;
+    return unless $padlist->can('ARRAY');
+    my $padnames = ($padlist->ARRAY)[0];
+    return unless $padnames->can('ARRAY');
+    @curpad_names = $padnames->ARRAY;
 }
 
 sub compile {
@@ -403,11 +405,12 @@ sub PADLIST_size {
     my $cv = shift;
     my $obj = UNIVERSAL::isa($cv, "B::CV") ? $cv : B::svref_2object($cv);
 
+    if (! $obj->PADLIST->isa('B::PADLIST')) {
+        return $obj->size;
+    }
+
     my $size = (B::Sizeof::AV + B::Sizeof::XPVAV) * 3; #padlist, names, values
 
-    if ($obj->PADLIST->isa('B::SPECIAL')) {
-        return B::Sizeof::AV; #XXX???
-    }
 
     my($padnames, $padvals) = $obj->PADLIST->ARRAY;
     my @names = $padnames->ARRAY;
@@ -430,7 +433,8 @@ sub PADLIST_size {
         my $is_fake = $names[$i]->FLAGS & B::SVf_FAKE;
         if ($is_fake) {
             $entsize += B::Sizeof::SV; # just a reference to outside scope
-            if (B::class($obj->OUTSIDE->GV) eq 'SPECIAL') {
+            my $outside = $obj->OUTSIDE;
+            if ($outside->can('GV') && B::class($outside->GV) eq 'SPECIAL') {
                 $filelex{ $obj->GV->STASH->NAME }->{ $names_pv[$i] } =
                   $vals[$i]->size;
             }

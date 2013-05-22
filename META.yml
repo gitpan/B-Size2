@@ -4,10 +4,11 @@ author:
   - unknown
 build_requires:
   ExtUtils::MakeMaker: 0
+  Test::More: 0
 configure_requires:
-  ExtUtils::MakeMaker: 0
+  Devel::PPPort: 3.20
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.130880'
+generated_by: 'ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.120921'
 license: unknown
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -18,4 +19,4 @@ no_index:
     - t
     - inc
 requires: {}
-version: 2.03
+version: 2.04
