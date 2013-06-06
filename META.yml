@@ -9,7 +9,7 @@ configure_requires:
   Devel::PPPort: 3.20
   ExtUtils::MakeMaker: 0
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.120921'
+generated_by: 'ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.131490'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -21,4 +21,4 @@ no_index:
     - inc
 requires:
   B: 0
-version: 2.05
+version: 2.06
