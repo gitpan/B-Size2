@@ -16,7 +16,7 @@ use constant MP2        => ($ENV{MOD_PERL_API_VERSION} || 0) == 2 ? 1 : 0;
 use B ();
 use B::Size2 ();
 
-our $VERSION = "2.06";
+our $VERSION = "2.07";
 
 my $opcount;
 my $opsize;
@@ -104,12 +104,14 @@ sub package_size {
 
         #measure global variables
         for my $type (qw(ARRAY HASH SCALAR)) {
-            no strict;
             next if $name =~ /::$/; #stash
             next unless /^[\w_]/;
             next if /^_</;
-            my $ref = *{$name}{$type};
-            next unless $ref;
+            my $ref = do {
+                no strict 'refs';
+                *{$name}{$type};
+            };
+            next unless defined $ref;
             my $obj = B::svref_2object($ref);
             next if ref($obj) eq 'B::NULL';
             my $tsize = $obj->size;

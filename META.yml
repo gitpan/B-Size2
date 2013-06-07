@@ -21,4 +21,4 @@ no_index:
     - inc
 requires:
   B: 0
-version: 2.06
+version: 2.07
